@@ -15,7 +15,16 @@ MongoClient.connect("mongodb://localhost:27017", function(err, client){
   }
 })
 
+  const db = client.db("artists");
+  console.log("Connected to database!");
 
+  server.get("/api/artists", function(req, res, next){
+  const artistsCollection = db.collection("artists");
+  artistsCollection.find().toArray(function(err, allArtists){
+  if(err) next(err); //Cool error handeling line
+  res.json(allArtists);
+  });
+});
 
 server.listen(3000, function(){
   console.log("Listening on port 3000");
